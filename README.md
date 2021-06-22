@@ -11,13 +11,12 @@ Requirements:
 
 There are 2 lists of sources:
 
-- distances_v1.dat
-		Taken from: Véron-Cetty, M. -P. ; Véron, P. A catalogue of quasars and active nuclei: 13th edition 
-		(https://ui.adsabs.harvard.edu/abs/2010A&A...518A..10V)
+1. distances_v1.dat
+		-Taken from: Véron-Cetty, M. -P. ; Véron, P. A catalogue of quasars and active nuclei: 13th edition (https://ui.adsabs.harvard.edu/abs/2010A&A...518A..10V)
 		
-- distances_v2.dat
-		Provided by the Radio Fundamental Catalog (RFC): http://astrogeo.org/sol/rfc/rfc_2021a/.
-		Taken just the sources that are also in distances_v1.dat.
+2. distances_v2.dat
+		-Provided by the Radio Fundamental Catalog (RFC). (http://astrogeo.org/sol/rfc/rfc_2021a/) Just sources that coincide with distances_v1.dat were taken.
+		
 
 # INSTALL CRPROPA3
 Run:
