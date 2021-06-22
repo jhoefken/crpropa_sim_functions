@@ -20,7 +20,7 @@ There are 2 lists of sources:
 
 # INSTALL CRPROPA3
 Run:
-````bash
+```bash
 	sudo bash install_crpropa.sh
 ```
 
@@ -28,7 +28,7 @@ Make sure that the make test works perfectly.
 
 # FUNCTIONS
 
-````python
+```python
 	sim_functions.simulate_dd_1D_pl(params,distances,num = 1000000,title = "new_simulation",model = "Gilmore12",sim_seed = 0)
 ```
 	
@@ -54,7 +54,7 @@ Make sure that the make test works perfectly.
 				An integer to fix the seed for the simulation. If 0, no seed is fixed.
 
 
-````python 
+```python 
 	sim_functions.simulate_dd_1D_parts(params,distances,num = 1000000,title = "new_simulation",model = "Gilmore12",parts = 1,n_e = 10000,seed = 0,sim_seed = 0)
 ```
 	
@@ -89,7 +89,7 @@ Make sure that the make test works perfectly.
 				An integer to fix the seed for the simulation. If 0, no seed is fixed.
 
 
-````python
+```python
 	sim_functions.plot_power(title = "new_simulation",plotfile = "new_simulation_plot",plottitle = "My simulation",power = 2.)
 ```
 	
@@ -109,7 +109,7 @@ Make sure that the make test works perfectly.
 				Power considered for the Y_axis of the plot. See main description of the function.
 
 
-````python
+```python
 	sim_functions.plot_parts(title = "new_simulation",plotfile = "new_simulation",plottitle = "My simulation",parts = 1)
 ```
 	
@@ -131,7 +131,7 @@ Make sure that the make test works perfectly.
 
 
 
-````python
+```python
 	sim_functions.plot_power_parts(title = "new_simulation",plotfile = "new_simulation",plottitle = "My simulation",parts = 1, power = 2.)
 ```
 	
@@ -156,7 +156,7 @@ Make sure that the make test works perfectly.
 
 
 
-````python
+```python
 	sim_functions.plot_errors_rcut(title = "new_simulation",plotfile = "new_simulation",plottitle = "My simulation",rcut = 21.)
 ```
 	
@@ -177,7 +177,7 @@ Make sure that the make test works perfectly.
 
 
 
-````python
+```python
 	sim_functions.plot_errors_parts(title = "new_simulation",plotfile = "new_simulation",plottitle = "My simulation",parts = 1)
 ```
 	
@@ -198,7 +198,7 @@ Make sure that the make test works perfectly.
 				It must coincide with the "parts" parameter of the original function that produced the data.
 
 
-````python
+```python
 	sim_functions.chi2_auger(title = "new_simulation0")
 ```
 
@@ -208,7 +208,7 @@ Make sure that the make test works perfectly.
 	Parameters:	title: string
 				Name of the document in which the simulated data is. No extension needed.
 
-````python
+```python
 	sim_functions.chi2_particles_auger(title = "new_simulation0")
 ```
 
@@ -218,7 +218,7 @@ Make sure that the make test works perfectly.
 	Parameters:	title: string
 				Name of the document in which the simulated data is. No extension needed.
 
-````python
+```python
 	sim_functions.chi2_global_auger(title = "new_simulation")
 ```
 
@@ -228,7 +228,7 @@ Make sure that the make test works perfectly.
 	Parameters:	title: string
 				Name of the document in which the simulated data is. No extension needed.
 
-````python
+```python
 	sim_functions.chi2_global_auger_parts(title = "new_simulation", parts = 1)
 ```
 
@@ -242,7 +242,7 @@ Make sure that the make test works perfectly.
 				Number of part in which the simulation was divided.
 				It must coincide with the "parts" parameter of the original function that produced the data.
 
-````python
+```python
 	sim_functions.chi2_global_auger_rcut(title = "new_simulation",rcut = 21.)
 ```
 
