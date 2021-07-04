@@ -320,9 +320,18 @@ def simulate_dd_1D_parts(params,distances,num = 1000000,title = "new_simulation"
 		# load events
 		output.close()
 
-def plot_power(title = "new_simulation",plotfile = "new_simulation_plot",plottitle = "My simulation",power = 2.):
+def plot_power(title = "new_simulation",plotfile = "new_simulation_plot",plottitle = "My simulation",power = 2., logemin = 18, logemax = 20.4):
 
 	output_dir()
+	
+	mask = (ecens >= logemin) & (ecens <= logemax)
+	mask_bins = (ebins >= logemin) & (ebins <= logemax)
+	ebins_ = ebins[mask_bins]
+	ecens_ = ecens[mask]
+	auger_ = auger[mask]
+	sauger_ = sauger[mask]
+	nauger_ = nauger[mask]
+	sigma_auger_ = sigma_auger[mask]
 
 	# load events
 	filename = 'output/'+title+'.dat'
@@ -334,7 +343,7 @@ def plot_power(title = "new_simulation",plotfile = "new_simulation_plot",plottit
 	A = pl.array([massNumber(id) for id in d['ID'].astype(int)])  # atomic mass number
 	lE = pl.log10(d['E']) + 18  # energy in log10(E/eV))
 
-	lEbins = ebins  # logarithmic bins
+	lEbins = ebins_  # logarithmic bins
 	lEcens = (lEbins[1:] + lEbins[:-1]) / 2  # logarithmic bin centers
 	dE = 10**lEbins[1:] - 10**lEbins[:-1]  # bin widths
 
@@ -378,16 +387,25 @@ def plot_power(title = "new_simulation",plotfile = "new_simulation_plot",plottit
 	pl.savefig(fileout)
 
 
-def plot_parts(title = "new_simulation",plotfile = "new_simulation",plottitle = "My simulation",parts = 1):
+def plot_parts(title = "new_simulation",plotfile = "new_simulation",plottitle = "My simulation",parts = 1, logemin = 18, logemax = 20.4):
 
 	output_dir()
+	
+	mask = (ecens >= logemin) & (ecens <= logemax)
+	mask_bins = (ebins >= logemin) & (ebins <= logemax)
+	ebins_ = ebins[mask_bins]
+	ecens_ = ecens[mask]
+	auger_ = auger[mask]
+	sauger_ = sauger[mask]
+	nauger_ = nauger[mask]
+	sigma_auger_ = sigma_auger[mask]
 
 	# load events
 	filename = ['output/'+title+str(i)+'.dat' for i in range(parts)]
 	fileout = 'output/'+plotfile+'.png'
 	
 	
-	lEbins = ebins  # logarithmic bins
+	lEbins = ebins_  # logarithmic bins
 	lEcens = (lEbins[1:] + lEbins[:-1]) / 2  # logarithmic bin centers
 	dE = 10**lEbins[1:] - 10**lEbins[:-1]  # bin widths
 	
@@ -442,12 +460,12 @@ def plot_parts(title = "new_simulation",plotfile = "new_simulation",plottitle = 
 	J /= J[0]
 
 	# calculate spectrum: J(E) = dN/dE for AUGER
-	Ja1 = plt.hist(ecens,bins=ebins,weights=auger1)[0] / dE
-	Ja2 = plt.hist(ecens,bins=ebins,weights=auger2)[0] / dE
-	Ja3 = plt.hist(ecens,bins=ebins,weights=auger3)[0] / dE
-	Ja4 = plt.hist(ecens,bins=ebins,weights=auger4)[0] / dE
-	Ja5 = plt.hist(ecens,bins=ebins,weights=auger5)[0] / dE
-	Ja = plt.hist(ecens,bins=ebins,weights=auger)[0] / dE
+	Ja1 = plt.hist(ecens_,bins=ebins_,weights=auger1_)[0] / dE
+	Ja2 = plt.hist(ecens_,bins=ebins_,weights=auger2_)[0] / dE
+	Ja3 = plt.hist(ecens_,bins=ebins_,weights=auger3_)[0] / dE
+	Ja4 = plt.hist(ecens_,bins=ebins_,weights=auger4_)[0] / dE
+	Ja5 = plt.hist(ecens_,bins=ebins_,weights=auger5_)[0] / dE
+	Ja = plt.hist(ecens_,bins=ebins_,weights=auger_)[0] / dE
 
 	
 	# normalize AUGER
@@ -484,16 +502,25 @@ def plot_parts(title = "new_simulation",plotfile = "new_simulation",plottitle = 
 
 
 
-def plot_power_parts(title = "new_simulation",plotfile = "new_simulation",plottitle = "My simulation",parts = 1, power = 2.):
+def plot_power_parts(title = "new_simulation",plotfile = "new_simulation",plottitle = "My simulation",parts = 1, power = 2., logemin = 18, logemax = 20.4):
 
 	output_dir()
+	
+	mask = (ecens >= logemin) & (ecens <= logemax)
+	mask_bins = (ebins >= logemin) & (ebins <= logemax)
+	ebins_ = ebins[mask_bins]
+	ecens_ = ecens[mask]
+	auger_ = auger[mask]
+	sauger_ = sauger[mask]
+	nauger_ = nauger[mask]
+	sigma_auger_ = sigma_auger[mask]
 
 	# load events
 	filename = ['output/'+title+str(i)+'.dat' for i in range(parts)]
 	fileout = 'output/'+plotfile+'.png'
 	
 	
-	lEbins = ebins  # logarithmic bins
+	lEbins = ebins_  # logarithmic bins
 	lEcens = (lEbins[1:] + lEbins[:-1]) / 2  # logarithmic bin centers
 	dE = 10**lEbins[1:] - 10**lEbins[:-1]  # bin widths
 	
@@ -566,9 +593,18 @@ def plot_power_parts(title = "new_simulation",plotfile = "new_simulation",plotti
 
 
 
-def plot_errors_rcut(title = "new_simulation",plotfile = "new_simulation",plottitle = "My simulation",rcut = 21.):
+def plot_errors_rcut(title = "new_simulation",plotfile = "new_simulation",plottitle = "My simulation",rcut = 21., logemin = 18, logemax = 20.4):
 
 	output_dir()
+	
+	mask = (ecens >= logemin) & (ecens <= logemax)
+	mask_bins = (ebins >= logemin) & (ebins <= logemax)
+	ebins_ = ebins[mask_bins]
+	ecens_ = ecens[mask]
+	auger_ = auger[mask]
+	sauger_ = sauger[mask]
+	nauger_ = nauger[mask]
+	sigma_auger_ = sigma_auger[mask]
 
 	# load events
 	filename = 'output/'+title+'.dat'
@@ -583,7 +619,7 @@ def plot_errors_rcut(title = "new_simulation",plotfile = "new_simulation",plotti
 	num = len(Z0)
 	energy0 = d['E0']
 
-	lEbins = ebins  # logarithmic bins
+	lEbins = ebins_  # logarithmic bins
 	lEcens = (lEbins[1:] + lEbins[:-1]) / 2  # logarithmic bin centers
 	dE = 10**lEbins[1:] - 10**lEbins[:-1]  # bin widths
 
@@ -606,9 +642,9 @@ def plot_errors_rcut(title = "new_simulation",plotfile = "new_simulation",plotti
 	J5 = pl.histogram(lE[idx5], bins=lEbins, weights=weight_rcut[idx5])[0] / dE
 
 	# calculate spectrum: J(E) = dN/dE for AUGER
-	Ja = plt.hist(ecens,bins=ebins,weights=auger)[0] / dE
-	Ja = auger / dE
-	Jerrors = sigma_auger / dE
+	Ja = plt.hist(ecens_,bins=ebins_,weights=auger_)[0] / dE
+	Ja = auger_ / dE
+	Jerrors = sigma_auger_ / dE
 
 	# normalize
 	J1 /= J[0]
@@ -643,15 +679,24 @@ def plot_errors_rcut(title = "new_simulation",plotfile = "new_simulation",plotti
 	pl.xlabel('$\log_{10}$(E/eV)')
 	pl.savefig(fileout)
 
-def plot_errors_parts(title = "new_simulation",plotfile = "new_simulation",plottitle = "My simulation",parts = 1):
+def plot_errors_parts(title = "new_simulation",plotfile = "new_simulation",plottitle = "My simulation",parts = 1, logemin = 18, logemax = 20.4):
 
 	output_dir()
+	
+	mask = (ecens >= logemin) & (ecens <= logemax)
+	mask_bins = (ebins >= logemin) & (ebins <= logemax)
+	ebins_ = ebins[mask_bins]
+	ecens_ = ecens[mask]
+	auger_ = auger[mask]
+	sauger_ = sauger[mask]
+	nauger_ = nauger[mask]
+	sigma_auger_ = sigma_auger[mask]
 
 	# load events
 	filename = ['output/'+title+str(i)+'.dat' for i in range(parts)]
 	fileout = 'output/'+plotfile+'.png'
 	
-	lEbins = ebins  # logarithmic bins
+	lEbins = ebins_  # logarithmic bins
 	lEcens = (lEbins[1:] + lEbins[:-1]) / 2  # logarithmic bin centers
 	dE = 10**lEbins[1:] - 10**lEbins[:-1]  # bin widths
 	
@@ -696,9 +741,9 @@ def plot_errors_parts(title = "new_simulation",plotfile = "new_simulation",plott
 
 	
 	# calculate spectrum: J(E) = dN/dE for AUGER
-	Ja = plt.hist(ecens,bins=ebins,weights=auger)[0] / dE
-	Ja = auger / dE
-	Jerrors = sigma_auger / dE
+	Ja = plt.hist(ecens,bins=ebins_,weights=auger_)[0] / dE
+	Ja = auger_ / dE
+	Jerrors = sigma_auger_ / dE
 	
 	# normalize
 	J1 /= J[0]
@@ -709,9 +754,9 @@ def plot_errors_parts(title = "new_simulation",plotfile = "new_simulation",plott
 	J /= J[0]
 	
 	# calculate spectrum: J(E) = dN/dE for AUGER
-	Ja = plt.hist(ecens,bins=ebins,weights=auger)[0] / dE
-	Ja = auger / dE
-	Jerrors = sigma_auger / dE
+	Ja = plt.hist(ecens_,bins=ebins_,weights=auger_)[0] / dE
+	Ja = auger_ / dE
+	Jerrors = sigma_auger_ / dE
 	
 	# normalize AUGER
 	Jerrors /= Ja[0]
@@ -740,9 +785,29 @@ def plot_errors_parts(title = "new_simulation",plotfile = "new_simulation",plott
 
 
 
-def chi2_auger(title = "new_simulation0"):
+def chi2_auger(title = "new_simulation0", logemin = 18, logemax = 20.4):
 
 	output_dir()
+	
+	mask = (ecens >= logemin) & (ecens <= logemax)
+	mask_bins = (ebins >= logemin) & (ebins <= logemax)
+	ebins_ = ebins[mask_bins]
+	ecens_ = ecens[mask]
+	auger_ = auger[mask]
+	sauger_ = sauger[mask]
+	nauger_ = nauger[mask]
+	
+	sauger1_ = sauger1[mask]
+	nauger1_ = nauger1[mask]
+	sauger2_ = sauger2[mask]
+	nauger2_ = nauger2[mask]
+	sauger3_ = sauger3[mask]
+	nauger3_ = nauger3[mask]
+	sauger4_ = sauger4[mask]
+	nauger4_ = nauger4[mask]
+	sauger5_ = sauger5[mask]
+	nauger5_ = nauger5[mask]
+
 
 	# load events
 	filename = 'output/'+title+'.dat'
@@ -761,15 +826,15 @@ def chi2_auger(title = "new_simulation0"):
 	
 	#Computing histograms for each kind of particle
 	logE  = np.log10(data['E']) + 18
-	hfull_test1 = plt.hist(logE[idx1],  bins=ebins, histtype='stepfilled', alpha=0.5, label='Observed')
+	hfull_test1 = plt.hist(logE[idx1],  bins=ebins_, histtype='stepfilled', alpha=0.5, label='Observed')
 	test1 = hfull_test1[0]
-	hfull_test2 = plt.hist(logE[idx2],  bins=ebins, histtype='stepfilled', alpha=0.5, label='Observed')
+	hfull_test2 = plt.hist(logE[idx2],  bins=ebins_, histtype='stepfilled', alpha=0.5, label='Observed')
 	test2 = hfull_test2[0]
-	hfull_test3 = plt.hist(logE[idx3],  bins=ebins, histtype='stepfilled', alpha=0.5, label='Observed')
+	hfull_test3 = plt.hist(logE[idx3],  bins=ebins_, histtype='stepfilled', alpha=0.5, label='Observed')
 	test3 = hfull_test3[0]
-	hfull_test4 = plt.hist(logE[idx4],  bins=ebins, histtype='stepfilled', alpha=0.5, label='Observed')
+	hfull_test4 = plt.hist(logE[idx4],  bins=ebins_, histtype='stepfilled', alpha=0.5, label='Observed')
 	test4 = hfull_test4[0]
-	hfull_test5 = plt.hist(logE[idx5],  bins=ebins, histtype='stepfilled', alpha=0.5, label='Observed')
+	hfull_test5 = plt.hist(logE[idx5],  bins=ebins_, histtype='stepfilled', alpha=0.5, label='Observed')
 	test5 = hfull_test5[0]
 	
 	#Normalization of test
@@ -787,11 +852,11 @@ def chi2_auger(title = "new_simulation0"):
 	stest5 = test5/n_test
 	
 	#Compute arrays with chi2 value for each bin and each kind of particle
-	h1 = np.array(((nauger1-test1)**2)/(sauger1+stest1))
-	h2 = np.array(((nauger2-test2)**2)/(sauger2+stest2))
-	h3 = np.array(((nauger3-test3)**2)/(sauger3+stest3))
-	h4 = np.array(((nauger4-test4)**2)/(sauger4+stest4))
-	h5 = np.array(((nauger5-test5)**2)/(sauger5+stest5))
+	h1 = np.array(((nauger1_-test1)**2)/(sauger1_+stest1))
+	h2 = np.array(((nauger2_-test2)**2)/(sauger2_+stest2))
+	h3 = np.array(((nauger3_-test3)**2)/(sauger3_+stest3))
+	h4 = np.array(((nauger4_-test4)**2)/(sauger4_+stest4))
+	h5 = np.array(((nauger5_-test5)**2)/(sauger5_+stest5))
 	
 	h1 = h1[np.isfinite(h1)]
 	h2 = h2[np.isfinite(h2)]
@@ -804,9 +869,28 @@ def chi2_auger(title = "new_simulation0"):
 	return chi2sum
 
 
-def chi2_particles_auger(title = "new_simulation0"):
+def chi2_particles_auger(title = "new_simulation0", logemin = 18, logemax = 20.4):
 
 	output_dir()
+	
+	mask = (ecens >= logemin) & (ecens <= logemax)
+	mask_bins = (ebins >= logemin) & (ebins <= logemax)
+	ebins_ = ebins[mask_bins]
+	ecens_ = ecens[mask]
+	auger_ = auger[mask]
+	sauger_ = sauger[mask]
+	nauger_ = nauger[mask]
+	
+	sauger1_ = sauger1[mask]
+	nauger1_ = nauger1[mask]
+	sauger2_ = sauger2[mask]
+	nauger2_ = nauger2[mask]
+	sauger3_ = sauger3[mask]
+	nauger3_ = nauger3[mask]
+	sauger4_ = sauger4[mask]
+	nauger4_ = nauger4[mask]
+	sauger5_ = sauger5[mask]
+	nauger5_ = nauger5[mask]
 
 	# load events
 	filename = 'output/'+title+'.dat'
@@ -825,15 +909,15 @@ def chi2_particles_auger(title = "new_simulation0"):
 	
 	#Computing histograms for each kind of particle
 	logE  = np.log10(data['E']) + 18
-	hfull_test1 = plt.hist(logE[idx1],  bins=ebins, histtype='stepfilled', alpha=0.5, label='Observed')
+	hfull_test1 = plt.hist(logE[idx1],  bins=ebins_, histtype='stepfilled', alpha=0.5, label='Observed')
 	test1 = hfull_test1[0]
-	hfull_test2 = plt.hist(logE[idx2],  bins=ebins, histtype='stepfilled', alpha=0.5, label='Observed')
+	hfull_test2 = plt.hist(logE[idx2],  bins=ebins_, histtype='stepfilled', alpha=0.5, label='Observed')
 	test2 = hfull_test2[0]
-	hfull_test3 = plt.hist(logE[idx3],  bins=ebins, histtype='stepfilled', alpha=0.5, label='Observed')
+	hfull_test3 = plt.hist(logE[idx3],  bins=ebins_, histtype='stepfilled', alpha=0.5, label='Observed')
 	test3 = hfull_test3[0]
-	hfull_test4 = plt.hist(logE[idx4],  bins=ebins, histtype='stepfilled', alpha=0.5, label='Observed')
+	hfull_test4 = plt.hist(logE[idx4],  bins=ebins_, histtype='stepfilled', alpha=0.5, label='Observed')
 	test4 = hfull_test4[0]
-	hfull_test5 = plt.hist(logE[idx5],  bins=ebins, histtype='stepfilled', alpha=0.5, label='Observed')
+	hfull_test5 = plt.hist(logE[idx5],  bins=ebins_, histtype='stepfilled', alpha=0.5, label='Observed')
 	test5 = hfull_test5[0]
 	
 	#Normalization of test
@@ -851,11 +935,11 @@ def chi2_particles_auger(title = "new_simulation0"):
 	stest5 = test5/n_test
 	
 	#Compute arrays with chi2 value for each bin and each kind of particle
-	h1 = np.array(((nauger1-test1)**2)/(sauger1+stest1))
-	h2 = np.array(((nauger2-test2)**2)/(sauger2+stest2))
-	h3 = np.array(((nauger3-test3)**2)/(sauger3+stest3))
-	h4 = np.array(((nauger4-test4)**2)/(sauger4+stest4))
-	h5 = np.array(((nauger5-test5)**2)/(sauger5+stest5))
+	h1 = np.array(((nauger1_-test1)**2)/(sauger1_+stest1))
+	h2 = np.array(((nauger2_-test2)**2)/(sauger2_+stest2))
+	h3 = np.array(((nauger3_-test3)**2)/(sauger3_+stest3))
+	h4 = np.array(((nauger4_-test4)**2)/(sauger4_+stest4))
+	h5 = np.array(((nauger5_-test5)**2)/(sauger5_+stest5))
 	
 	h1 = h1[np.isfinite(h1)]
 	h2 = h2[np.isfinite(h2)]
@@ -868,9 +952,17 @@ def chi2_particles_auger(title = "new_simulation0"):
 	return [h1.sum(),h2.sum(),h3.sum(),h4.sum(),h5.sum(),chi2sum]
 
 
-def chi2_global_auger(title = "new_simulation"):
+def chi2_global_auger(title = "new_simulation", logemin = 18, logemax = 20.4):
 
 	output_dir()
+	
+	mask = (ecens >= logemin) & (ecens <= logemax)
+	mask_bins = (ebins >= logemin) & (ebins <= logemax)
+	ebins_ = ebins[mask_bins]
+	ecens_ = ecens[mask]
+	auger_ = auger[mask]
+	sauger_ = sauger[mask]
+	nauger_ = nauger[mask]
 
 	# load events
 	filename = 'output/'+title+'.dat'
@@ -889,7 +981,7 @@ def chi2_global_auger(title = "new_simulation"):
 	
 	#Computing histograms for each kind of particle
 	logE  = np.log10(data['E']) + 18
-	hfull_test = plt.hist(logE,  bins=ebins, histtype='stepfilled', alpha=0.5, label='Observed')
+	hfull_test = plt.hist(logE,  bins=ebins_, histtype='stepfilled', alpha=0.5, label='Observed')
 	test = hfull_test[0]
 	
 	#Normalization of test
@@ -899,7 +991,7 @@ def chi2_global_auger(title = "new_simulation"):
 	stest = test/n_test
 	
 	#Compute arrays with chi2 value for each bin and each kind of particle
-	h = np.array(((nauger-test)**2)/(sauger+stest))
+	h = np.array(((nauger_-test)**2)/(sauger_+stest))
 	
 	h = h[np.isfinite(h)]
 
@@ -907,14 +999,22 @@ def chi2_global_auger(title = "new_simulation"):
 	
 	return chi2sum
 
-def chi2_global_auger_parts(title = "new_simulation", parts = 1):
+def chi2_global_auger_parts(title = "new_simulation", parts = 1, logemin = 18, logemax = 20.4):
 
 	output_dir()
-
+	
+	mask = (ecens >= logemin) & (ecens <= logemax)
+	mask_bins = (ebins >= logemin) & (ebins <= logemax)
+	ebins_ = ebins[mask_bins]
+	ecens_ = ecens[mask]
+	auger_ = auger[mask]
+	sauger_ = sauger[mask]
+	nauger_ = nauger[mask]
+	
 	# load events
 	filename = ['output/'+title+str(i)+'.dat' for i in range(parts)]
 	count = 0
-	test = np.array([0. for i in range(len(auger))])
+	test = np.array([0. for i in range(len(auger_))])
 	
 	for i_parts in range(parts):
 	
@@ -936,7 +1036,7 @@ def chi2_global_auger_parts(title = "new_simulation", parts = 1):
 						
 				#Computing histograms for each kind of particle
 				logE  = np.log10(data['E']) + 18
-				hfull_test = plt.hist(logE,  bins=ebins, histtype='stepfilled', alpha=0.5, label='Observed')
+				hfull_test = plt.hist(logE,  bins=ebins_, histtype='stepfilled', alpha=0.5, label='Observed')
 				
 				if (count == 0):
 					test = hfull_test[0]
@@ -951,13 +1051,13 @@ def chi2_global_auger_parts(title = "new_simulation", parts = 1):
 	test = test/n_test
 	stest = test/n_test
 	
-	sigmas = sauger + stest
+	sigmas = sauger_ + stest
 	test = test[sigmas != 0]
-	naugerb = nauger[sigmas != 0]
+	nauger_ = nauger_[sigmas != 0]
 	sigmas = sigmas[sigmas != 0]
 	
 	#Compute arrays with chi2 value for each bin and each kind of particle
-	h = np.array(((naugerb-test)**2)/(sigmas))
+	h = np.array(((nauger_-test)**2)/(sigmas))
 	
 	#h = h[np.isfinite(h)]
 
@@ -966,9 +1066,17 @@ def chi2_global_auger_parts(title = "new_simulation", parts = 1):
 	return chi2sum
 
 
-def chi2_global_auger_rcut(title = "new_simulation",rcut = 21.):
+def chi2_global_auger_rcut(title = "new_simulation",rcut = 21., logemin = 18, logemax = 20.4):
 
 	output_dir()
+	
+	mask = (ecens >= logemin) & (ecens <= logemax)
+	mask_bins = (ebins >= logemin) & (ebins <= logemax)
+	ebins_ = ebins[mask_bins]
+	ecens_ = ecens[mask]
+	auger_ = auger[mask]
+	sauger_ = sauger[mask]
+	nauger_ = nauger[mask]
 
 	# load events
 	filename = 'output/'+title+'.dat'
@@ -993,7 +1101,7 @@ def chi2_global_auger_rcut(title = "new_simulation",rcut = 21.):
 	
 	#Computing histograms for each kind of particle
 	logE  = np.log10(data['E']) + 18
-	hfull_test = plt.hist(logE,  bins=ebins, weights=weight_rcut, histtype='stepfilled', alpha=0.5, label='Observed')
+	hfull_test = plt.hist(logE,  bins=ebins_, weights=weight_rcut, histtype='stepfilled', alpha=0.5, label='Observed')
 	test = hfull_test[0]
 	
 	#Normalization of test
@@ -1002,13 +1110,13 @@ def chi2_global_auger_rcut(title = "new_simulation",rcut = 21.):
 	test = test/n_test
 	stest = test/n_test
 	
-	sigmas = sauger + stest
+	sigmas = sauger_ + stest
 	test = test[sigmas != 0]
-	naugerb = nauger[sigmas != 0]
+	nauger_ = nauger_[sigmas != 0]
 	sigmas = sigmas[sigmas != 0]
 	
 	#Compute arrays with chi2 value for each bin and each kind of particle
-	h = np.array(((naugerb-test)**2)/(sigmas))
+	h = np.array(((nauger_-test)**2)/(sigmas))
 	
 	chi2sum = h.sum()
 	
