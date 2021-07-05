@@ -24,7 +24,7 @@ def not_empty_file(filename):
 	return True
 
 def output_dir():
-	if !(os.path.exists("/output")):
+	if not(os.path.exists("/output")):
 		os.mkdir("/output")
 
 # Simulation for Power Law and distance distribution
