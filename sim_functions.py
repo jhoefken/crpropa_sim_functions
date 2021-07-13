@@ -741,7 +741,7 @@ def plot_errors_parts(title = "new_simulation",plotfile = "new_simulation",plott
 
 	
 	# calculate spectrum: J(E) = dN/dE for AUGER
-	Ja = plt.hist(ecens,bins=ebins_,weights=auger_)[0] / dE
+	Ja = plt.hist(ecens_,bins=ebins_,weights=auger_)[0] / dE
 	Ja = auger_ / dE
 	Jerrors = sigma_auger_ / dE
 	
