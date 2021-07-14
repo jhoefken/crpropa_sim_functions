@@ -620,8 +620,8 @@ def plot_power_sources(title = "new_simulation",plotfile = "new_simulation",plot
 	
 		if not_empty_file(filename[i_parts]):
 			d = pl.genfromtxt(filename[i_parts], names=True)
-			
-			if (d.ndim == 2):
+			db = pl.genfromtxt(filename[i_parts])
+			if (db.ndim == 2):
 				# observed quantities
 				Z = pl.array([chargeNumber(id) for id in d['ID0'].astype(int)])  # element
 				A = pl.array([massNumber(id) for id in d['ID0'].astype(int)])  # atomic mass number
@@ -677,7 +677,7 @@ def plot_power_sources(title = "new_simulation",plotfile = "new_simulation",plot
 	pl.legend(fontsize=15, frameon=True)
 	pl.title(plottitle)
 	pl.grid()
-	pl.ylabel('$J(E) E^$'+str(power))
+	pl.ylabel('$J(E) E**$'+str(power))
 	pl.xlabel('$\log_{10}$(E/eV)')
 	pl.savefig(fileout)
 
