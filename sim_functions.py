@@ -592,6 +592,95 @@ def plot_power_parts(title = "new_simulation",plotfile = "new_simulation",plotti
 	pl.savefig(fileout)
 
 
+def plot_power_sources(title = "new_simulation",plotfile = "new_simulation",plottitle = "My simulation",parts = 1, power = 2., logemin = 18, logemax = 20.4):
+
+	output_dir()
+	
+	mask = (ecens >= logemin) & (ecens <= logemax)
+	mask_bins = (ebins >= logemin) & (ebins <= logemax)
+	ebins_ = ebins[mask_bins]
+	ecens_ = ecens[mask]
+	auger_ = auger[mask]
+	sauger_ = sauger[mask]
+	nauger_ = nauger[mask]
+	sigma_auger_ = sigma_auger[mask]
+
+	# load events
+	filename = ['output/'+title+str(i)+'.dat' for i in range(parts)]
+	fileout = 'output/'+plotfile+'.png'
+	
+	
+	lEbins = ebins_  # logarithmic bins
+	lEcens = (lEbins[1:] + lEbins[:-1]) / 2  # logarithmic bin centers
+	dE = 10**lEbins[1:] - 10**lEbins[:-1]  # bin widths
+	
+	count = 0
+
+	for i_parts in range(parts):
+	
+		if not_empty_file(filename[i_parts]):
+			d = pl.genfromtxt(filename[i_parts], names=True)
+			
+			if (d.ndim == 2):
+				# observed quantities
+				Z = pl.array([chargeNumber(id) for id in d['ID0'].astype(int)])  # element
+				A = pl.array([massNumber(id) for id in d['ID0'].astype(int)])  # atomic mass number
+				
+				lE = pl.log10(d['E0']) + 18  # energy in log10(E/eV))
+				
+				# identify mass groups
+				idx1 = A == 1
+				idx2 = (A > 1) * (A <= 4)
+				idx3 = (A > 4) * (A <= 22)
+				idx4 = (A > 22) * (A <= 38)
+				idx5 = (A > 38)
+
+				
+				
+				if (count == 0):
+					# calculate spectrum: J(E) = dN/dE
+					J  = pl.histogram(lE, bins=lEbins)[0] / dE
+					J1 = pl.histogram(lE[idx1], bins=lEbins)[0] / dE
+					J2 = pl.histogram(lE[idx2], bins=lEbins)[0] / dE
+					J3 = pl.histogram(lE[idx3], bins=lEbins)[0] / dE
+					J4 = pl.histogram(lE[idx4], bins=lEbins)[0] / dE
+					J5 = pl.histogram(lE[idx5], bins=lEbins)[0] / dE
+				else:
+					J  = J + pl.histogram(lE, bins=lEbins)[0] / dE
+					J1 = J1 + pl.histogram(lE[idx1], bins=lEbins)[0] / dE
+					J2 = J2 + pl.histogram(lE[idx2], bins=lEbins)[0] / dE
+					J3 = J3 + pl.histogram(lE[idx3], bins=lEbins)[0] / dE
+					J4 = J4 + pl.histogram(lE[idx4], bins=lEbins)[0] / dE
+					J5 = J5 + pl.histogram(lE[idx5], bins=lEbins)[0] / dE
+				
+				count += 1
+
+	
+	
+	# Compute J * E^{power}
+	J = J * (10**lEcens)**power
+	J1 = J1 * (10**lEcens)**power
+	J2 = J2 * (10**lEcens)**power
+	J3 = J3 * (10**lEcens)**power
+	J4 = J4 * (10**lEcens)**power
+	J5 = J5 * (10**lEcens)**power
+	
+	pl.figure(figsize=(10,7))
+	pl.plot(lEcens, J,  color='SaddleBrown', label='Total')
+	pl.plot(lEcens, J1, color='blue', label='A = 1')
+	pl.plot(lEcens, J2, color='grey', label='A = 2-4')
+	pl.plot(lEcens, J3, color='green', label='A = 5-22')
+	pl.plot(lEcens, J4, color='purple', label='A = 23-38')
+	pl.plot(lEcens, J5, color='red', label='A $>$ 38')
+
+	
+	pl.legend(fontsize=15, frameon=True)
+	pl.title(plottitle)
+	pl.grid()
+	pl.ylabel('$J(E) E^$'+str(power))
+	pl.xlabel('$\log_{10}$(E/eV)')
+	pl.savefig(fileout)
+
 
 def plot_errors_rcut(title = "new_simulation",plotfile = "new_simulation",plottitle = "My simulation",rcut = 21., logemin = 18, logemax = 20.4):
 
