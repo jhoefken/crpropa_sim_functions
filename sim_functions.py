@@ -127,6 +127,114 @@ def simulate_dd_1D_pl(params,distances,num = 1000000,title = "new_simulation",mo
 	# load events
 	output.close()
 
+def simulate_dd_1D_separate(params,distances,num = 1000000,title = "new_simulation",model = "Gilmore12",sim_seed = 0):
+	
+	output_dir()
+	gamma = params[0]
+	fractions = params[1:]
+	elems = ['H','He','N','Si','Fe']
+	for i in range(len(elems)):
+		if fractions[i] != 0:
+			simulate_dd_1D_pl_elem(gamma,elem=elems[i],distances,num = num*fractions[i],title = title,model = model,sim_seed = sim_seed)
+	
+
+# Simulation for Power Law and distance distribution, for one element
+def simulate_dd_1D_pl_elem(gamma,elem='H',distances,num = 1000000,title = "new_simulation",model = "Gilmore12",sim_seed = 0):
+
+	#Energy distributions for each particle: H, He, N, Si, Fe
+	bins = 10000
+	g = gamma
+	n_d = len(distances[0])	#for-iteration number for different distances
+	
+	dist = distances[0]  # distance in Mpc
+	probd = distances[1]
+	
+	
+	sim = ModuleList()
+	if sim_seed:
+		Random_seedThreads(sim_seed)
+
+	#simulation steps
+	sim.add(SimplePropagation(1*kpc, 10*Mpc))
+
+
+	#simulation processes
+	sim.add(PhotoPionProduction(CMB()))
+	sim.add(ElectronPairProduction(CMB()))
+	sim.add(PhotoDisintegration(CMB()))
+	
+	if (model == "Gilmore12"):
+		sim.add(PhotoPionProduction(IRB_Gilmore12()))
+		sim.add(ElectronPairProduction(IRB_Gilmore12()))
+		sim.add(PhotoDisintegration(IRB_Gilmore12()))
+	
+	if (model == "Dominguez11"): 
+		sim.add(PhotoPionProduction(IRB_Dominguez11()))
+		sim.add(ElectronPairProduction(IRB_Dominguez11()))
+		sim.add(PhotoDisintegration(IRB_Dominguez11()))
+	
+	sim.add(NuclearDecay())
+
+	#stop if particle reaches this energy level or below
+	sim.add(MinimumEnergy(1*EeV))
+
+	#define observer
+	obs = Observer()
+	#observer at x=0
+	obs.add(ObserverPoint()) 
+
+	# name of the file
+	filename = 'output/'+elem+'_'+title+'.dat'
+
+	#write output on detection of event
+	output = TextOutput(filename, Output.Event1D)
+	#output.disableAll()
+	#output.enable(Output.CurrentEnergyColumn)
+	#output.enable(Output.SourceEnergyColumn)
+	#output.enable(Output.CreatedPositionColumn)
+	#output.enable(Output.SourcePositionColumn)
+	#output.enable(Output.CurrentPositionColumn)
+	output.enable(Output.SerialNumberColumn)
+	#output.enable(Output.SourceIdColumn)
+	#output.enable(Output.CurrentIdColumn)
+	obs.onDetection(output)
+
+	sim.add(obs)
+
+	sourcelist = SourceList()
+
+	#composition
+	composition= SourceMultipleParticleTypes()
+	
+	if elem=='H':
+		composition.add(nucleusId(1,1),1.0)
+	elif elem=='He':
+		composition.add(nucleusId(4,2),1.0)
+	elif elem=='N':
+		composition.add(nucleusId(14,7),1.0)
+	elif elem=='Si':
+		composition.add(nucleusId(28,14),1.0)
+	elif elem=='Fe':
+		composition.add(nucleusId(56,26),1.0)
+
+	#Load different sources (for different distances and energies)
+	for k in range(n_d):
+		source = Source()
+		source.add(composition)
+		source.add(SourceRedshift1D())
+		source.add(SourcePosition(Vector3d(dist[k], 0, 0) * Mpc))
+		source.add(SourcePowerLawSpectrum(1*EeV,1000.*EeV,-g))
+		sourcelist.add(source, probd[k])
+	
+		
+	# run simulation
+	sim.setShowProgress(True)
+
+	sim.run(sourcelist,num)
+
+	# load events
+	output.close()
+
 
 def simulate_dd_1D_parts(params,distances,num = 1000000,title = "new_simulation",model = "Gilmore12",parts = 1,n_e = 10000,seed = 0,sim_seed = 0):
 
@@ -768,6 +876,105 @@ def plot_errors_rcut(title = "new_simulation",plotfile = "new_simulation",plotti
 	pl.xlabel('$\log_{10}$(E/eV)')
 	pl.savefig(fileout)
 
+def plot_errors_rcut_separate(elems,title = "new_simulation",plotfile = "new_simulation",plottitle = "My simulation",rcut = 21., logemin = 18, logemax = 20.4):
+
+	#elems must be a list of the form: ['H','He']
+	
+	mask = (ecens >= logemin) & (ecens <= logemax)
+	mask_bins = (ebins >= logemin) & (ebins <= logemax)
+	ebins_ = ebins[mask_bins]
+	ecens_ = ecens[mask]
+	auger_ = auger[mask]
+	sauger_ = sauger[mask]
+	nauger_ = nauger[mask]
+	sigma_auger_ = sigma_auger[mask]
+	
+	fileout = 'output/'+plotfile+'.png'
+	first = True
+	
+	for el in elems:
+		
+		# load events
+		filename = 'output/'+el+'_'+title+'.dat'
+		d = pl.genfromtxt(filename, names=True)
+
+		# observed quantities
+		Z = pl.array([chargeNumber(id) for id in d['ID'].astype(int)])  # element
+		Z0 = pl.array([chargeNumber(id) for id in d['ID0'].astype(int)])  # element at source
+		A = pl.array([massNumber(id) for id in d['ID'].astype(int)])  # atomic mass number
+		lE = pl.log10(d['E']) + 18  # energy in log10(E/eV))
+		num = len(Z0)
+		energy0 = d['E0']
+
+		lEbins = ebins_  # logarithmic bins
+		lEcens = (lEbins[1:] + lEbins[:-1]) / 2  # logarithmic bin centers
+		dE = 10**lEbins[1:] - 10**lEbins[:-1]  # bin widths
+
+		# identify mass groups
+		idx1 = A == 1
+		idx2 = (A > 1) * (A <= 4)
+		idx3 = (A > 4) * (A <= 22)
+		idx4 = (A > 22) * (A <= 38)
+		idx5 = (A > 38)
+		
+		# Modifying distribution according to rcut
+		weight_rcut = np.array([f_cut(energy0[i]*(10**18.),Z0[i]*(10**rcut)) for i in range(num)])
+
+		# calculate spectrum: J(E) = dN/dE
+		if first:
+			J  = pl.histogram(lE, bins=lEbins,weights=weight_rcut)[0] / dE
+			J1 = pl.histogram(lE[idx1], bins=lEbins, weights=weight_rcut[idx1])[0] / dE
+			J2 = pl.histogram(lE[idx2], bins=lEbins, weights=weight_rcut[idx2])[0] / dE
+			J3 = pl.histogram(lE[idx3], bins=lEbins, weights=weight_rcut[idx3])[0] / dE
+			J4 = pl.histogram(lE[idx4], bins=lEbins, weights=weight_rcut[idx4])[0] / dE
+			J5 = pl.histogram(lE[idx5], bins=lEbins, weights=weight_rcut[idx5])[0] / dE
+			first = False
+		else:
+			J  += pl.histogram(lE, bins=lEbins,weights=weight_rcut)[0] / dE
+			J1 += pl.histogram(lE[idx1], bins=lEbins, weights=weight_rcut[idx1])[0] / dE
+			J2 += pl.histogram(lE[idx2], bins=lEbins, weights=weight_rcut[idx2])[0] / dE
+			J3 += pl.histogram(lE[idx3], bins=lEbins, weights=weight_rcut[idx3])[0] / dE
+			J4 += pl.histogram(lE[idx4], bins=lEbins, weights=weight_rcut[idx4])[0] / dE
+			J5 += pl.histogram(lE[idx5], bins=lEbins, weights=weight_rcut[idx5])[0] / dE
+
+	# calculate spectrum: J(E) = dN/dE for AUGER
+	Ja = plt.hist(ecens_,bins=ebins_,weights=auger_)[0] / dE
+	Ja = auger_ / dE
+	Jerrors = sigma_auger_ / dE
+
+	# normalize
+	J1 /= J[0]
+	J2 /= J[0]
+	J3 /= J[0]
+	J4 /= J[0]
+	J5 /= J[0]
+	J /= J[0]
+
+	# normalize AUGER
+	Jerrors /= Ja[0]
+	Ja /= Ja[0]
+	
+
+	pl.figure(figsize=(10,7))
+	pl.plot(lEcens, J,  color='SaddleBrown', label='Total')
+	pl.plot(lEcens, J1, color='blue', label='A = 1')
+	pl.plot(lEcens, J2, color='grey', label='A = 2-4')
+	pl.plot(lEcens, J3, color='green', label='A = 5-22')
+	pl.plot(lEcens, J4, color='purple', label='A = 23-38')
+	pl.plot(lEcens, J5, color='red', label='A $>$ 38')
+
+	pl.plot(lEcens, Ja, "ok")
+	pl.errorbar(lEcens, Ja, yerr=Jerrors, fmt = "ok")
+
+	pl.legend(fontsize=15, frameon=True)
+	pl.semilogy()
+	pl.ylim(1e-5)
+	pl.title(plottitle)
+	pl.grid()
+	pl.ylabel('$J(E)$ [a.u.]')
+	pl.xlabel('$\log_{10}$(E/eV)')
+	pl.savefig(fileout)
+
 def plot_errors_parts(title = "new_simulation",plotfile = "new_simulation",plottitle = "My simulation",parts = 1, logemin = 18, logemax = 20.4):
 
 	output_dir()
@@ -1192,6 +1399,72 @@ def chi2_global_auger_rcut(title = "new_simulation",rcut = 21., logemin = 18, lo
 	logE  = np.log10(data['E']) + 18
 	hfull_test = plt.hist(logE,  bins=ebins_, weights=weight_rcut, histtype='stepfilled', alpha=0.5, label='Observed')
 	test = hfull_test[0]
+	
+	#Normalization of test
+	n_test = test.sum()
+	n_test = float(n_test)
+	test = test/n_test
+	stest = test/n_test
+	
+	sigmas = sauger_ + stest
+	test = test[sigmas != 0]
+	nauger_ = nauger_[sigmas != 0]
+	sigmas = sigmas[sigmas != 0]
+	
+	#Compute arrays with chi2 value for each bin and each kind of particle
+	h = np.array(((nauger_-test)**2)/(sigmas))
+	
+	chi2sum = h.sum()
+	
+	return chi2sum
+
+def chi2_global_auger_rcut_separate(elems,title = "new_simulation",rcut = 21., logemin = 18, logemax = 20.4):
+
+	#elems must be a list of the form: ['H','He']
+	
+	mask = (ecens >= logemin) & (ecens <= logemax)
+	mask_bins = (ebins >= logemin) & (ebins <= logemax)
+	ebins_ = ebins[mask_bins]
+	ecens_ = ecens[mask]
+	auger_ = auger[mask]
+	sauger_ = sauger[mask]
+	nauger_ = nauger[mask]
+	
+	first = True
+	
+	for el in elems:
+
+		
+		# load events
+		filename = 'output/'+el+'_'+title+'.dat'
+		data = np.genfromtxt(filename, names=True)
+		
+		# observed quantities
+		Z = pl.array([chargeNumber(id) for id in data['ID'].astype(int)])  # element
+		Z0 = pl.array([chargeNumber(id) for id in data['ID0'].astype(int)])  # element
+		A = pl.array([massNumber(id) for id in data['ID'].astype(int)])  # atomic mass number
+		num = len(Z0)
+		energy0 = data['E0']
+		
+		# identify mass groups
+		idx1 = A == 1
+		idx2 = (A > 1) * (A <= 4)
+		idx3 = (A > 4) * (A <= 22)
+		idx4 = (A > 22) * (A <= 38)
+		idx5 = (A > 38)
+		
+		# Modifying distribution according to rcut
+		weight_rcut = np.array([f_cut(energy0[i]*(10**18.),Z0[i]*(10**rcut)) for i in range(num)])
+		
+		#Computing histograms for each kind of particle
+		logE  = np.log10(data['E']) + 18
+		hfull_test = plt.hist(logE,  bins=ebins_, weights=weight_rcut, histtype='stepfilled', alpha=0.5, label='Observed')
+		
+		if first:
+			test = hfull_test[0]
+			first = False
+		else:
+			test += hfull_test[0]
 	
 	#Normalization of test
 	n_test = test.sum()
