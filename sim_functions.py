@@ -890,6 +890,9 @@ def plot_errors_rcut_separate(fractions,title = "new_simulation",plotfile = "new
 	
 	for i in range(len(elems)):
 		
+		if round(fractions[i],7)==0:
+			continue
+		
 		# load events
 		filename = 'output/'+elems[i]+'_'+title+'.dat'
 		d = pl.genfromtxt(filename, names=True)
@@ -1432,6 +1435,9 @@ def chi2_global_auger_rcut_separate(fractions,title = "new_simulation",rcut = 21
 	for i in range(len(elems)):
 
 		
+		if round(fractions[i],7)==0:
+			continue
+				
 		# load events
 		filename = 'output/'+elems[i]+'_'+title+'.dat'
 		data = np.genfromtxt(filename, names=True)
