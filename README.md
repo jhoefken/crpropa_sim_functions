@@ -55,14 +55,13 @@ Make sure that the make test works perfectly.
 				An integer to fix the seed for the simulation. If 0, no seed is fixed.
 
 ```python 
-	sim_functions.simulate_dd_1D_separate(params,distances,num = 1000000,title = "new_simulation",model = "Gilmore12",sim_seed = 0)
+	sim_functions.simulate_dd_1D_separate(gamma,distances,num = 1000000,title = "new_simulation",model = "Gilmore12",sim_seed = 0)
 ```
 	It simulates the propagation of Cosmic Rays using a powerlaw distribution of energy from 1 to 1000 EeV without an R_cut, considering different elements for each simulation.
 
 	Parameters:	
-			* params: 1-dimensional ndarray or list
-				The list must contain in order: the negative of the exponent gamma, the fractions of
-				hydrogen, helium, nitrogen, silicum and iron, respectively (maximum value: 1.).
+			* gamma: float
+				Gamma, whose negative value will be the exponent used for the Power Law Spectrum at sources.
 				
 			* distances: 2-dimensional array or list
 				It must contain a list with 2 rows: the distance in Mpc and the weight of that source.
@@ -263,15 +262,15 @@ Make sure that the make test works perfectly.
 
 
 ```python
-	sim_functions.plot_errors_rcut_separate(elems,title = "new_simulation",plotfile = "new_simulation",plottitle = "My simulation",rcut = 21., logemin = 18, logemax = 20.4)
+	sim_functions.plot_errors_rcut_separate(fractions,title = "new_simulation",plotfile = "new_simulation",plottitle = "My simulation",rcut = 21., logemin = 18, logemax = 20.4)
 ```
 	
 	It plots the events of the simulated propagation of Cosmic Rays produced by the function sim_functions.simulate_dd_1D_separate. It automatically filters the output in order to add the R_cut effect and does it for each of the elements separately. X_axis: energy in EeV. Y_axis: dN/dE.
 	The events are normalized according to the first bin of the total events.
 
 	Parameters:	
-			* elems: list
-				List of the elements considered. It must be of the form: ['H','He','N','Si','Fe'], though it doesn't need to contain all the elements.
+			* elems: list of floats
+				List of the fractions considered for each of the following elements: ['H','He','N','Si','Fe'].
 			
 			* title: string
 				Name of the document in which the simulated data is. No extension needed.
@@ -420,15 +419,15 @@ Make sure that the make test works perfectly.
 
 
 ```python
-	sim_functions.chi2_global_auger_rcut_separate(elems,title = "new_simulation",rcut = 21., logemin = 18, logemax = 20.4)
+	sim_functions.chi2_global_auger_rcut_separate(fractions,title = "new_simulation",rcut = 21., logemin = 18, logemax = 20.4)
 ```
 
 	It computes the chi2 considering the events of the simulated propagation of Cosmic Rays produced by the function sim_functions.simulate_dd_1D_separate. It automatically filters the output in order to add the R_cut effect.
 	Output: float, chi2.
 	
 	Parameters:	
-			* elems: list
-				List of the elements considered. It must be of the form: ['H','He','N','Si','Fe'], though it doesn't need to contain all the elements.
+			* elems: list of floats
+				List of the fractions considered for each of the following elements: ['H','He','N','Si','Fe'].
 	
 			* title: string
 				Name of the document in which the simulated data is. No extension needed.

@@ -127,15 +127,12 @@ def simulate_dd_1D_pl(params,distances,num = 1000000,title = "new_simulation",mo
 	# load events
 	output.close()
 
-def simulate_dd_1D_separate(params,distances,num = 1000000,title = "new_simulation",model = "Gilmore12",sim_seed = 0):
+def simulate_dd_1D_separate(gamma,distances,num = 1000000,title = "new_simulation",model = "Gilmore12",sim_seed = 0):
 	
 	output_dir()
-	gamma = params[0]
-	fractions = params[1:]
 	elems = ['H','He','N','Si','Fe']
 	for i in range(len(elems)):
-		if fractions[i] != 0:
-			simulate_dd_1D_pl_elem(gamma,elem=elems[i],distances,num = num*fractions[i],title = title,model = model,sim_seed = sim_seed)
+		simulate_dd_1D_pl_elem(gamma,elem=elems[i],distances,num = num,title = title,model = model,sim_seed = sim_seed)
 	
 
 # Simulation for Power Law and distance distribution, for one element
@@ -876,10 +873,8 @@ def plot_errors_rcut(title = "new_simulation",plotfile = "new_simulation",plotti
 	pl.xlabel('$\log_{10}$(E/eV)')
 	pl.savefig(fileout)
 
-def plot_errors_rcut_separate(elems,title = "new_simulation",plotfile = "new_simulation",plottitle = "My simulation",rcut = 21., logemin = 18, logemax = 20.4):
+def plot_errors_rcut_separate(fractions,title = "new_simulation",plotfile = "new_simulation",plottitle = "My simulation",rcut = 21., logemin = 18, logemax = 20.4):
 
-	#elems must be a list of the form: ['H','He']
-	
 	mask = (ecens >= logemin) & (ecens <= logemax)
 	mask_bins = (ebins >= logemin) & (ebins <= logemax)
 	ebins_ = ebins[mask_bins]
@@ -891,11 +886,12 @@ def plot_errors_rcut_separate(elems,title = "new_simulation",plotfile = "new_sim
 	
 	fileout = 'output/'+plotfile+'.png'
 	first = True
+	elems = ['H','He','N','Si','Fe']
 	
-	for el in elems:
+	for i in range(len(elems)):
 		
 		# load events
-		filename = 'output/'+el+'_'+title+'.dat'
+		filename = 'output/'+elems[i]+'_'+title+'.dat'
 		d = pl.genfromtxt(filename, names=True)
 
 		# observed quantities
@@ -919,6 +915,7 @@ def plot_errors_rcut_separate(elems,title = "new_simulation",plotfile = "new_sim
 		
 		# Modifying distribution according to rcut
 		weight_rcut = np.array([f_cut(energy0[i]*(10**18.),Z0[i]*(10**rcut)) for i in range(num)])
+		weight_rcut *= fractions[i]
 
 		# calculate spectrum: J(E) = dN/dE
 		if first:
@@ -1418,10 +1415,8 @@ def chi2_global_auger_rcut(title = "new_simulation",rcut = 21., logemin = 18, lo
 	
 	return chi2sum
 
-def chi2_global_auger_rcut_separate(elems,title = "new_simulation",rcut = 21., logemin = 18, logemax = 20.4):
+def chi2_global_auger_rcut_separate(fractions,title = "new_simulation",rcut = 21., logemin = 18, logemax = 20.4):
 
-	#elems must be a list of the form: ['H','He']
-	
 	mask = (ecens >= logemin) & (ecens <= logemax)
 	mask_bins = (ebins >= logemin) & (ebins <= logemax)
 	ebins_ = ebins[mask_bins]
@@ -1432,11 +1427,13 @@ def chi2_global_auger_rcut_separate(elems,title = "new_simulation",rcut = 21., l
 	
 	first = True
 	
-	for el in elems:
+	elems = ['H','He','N','Si','Fe']
+	
+	for i in range(len(elems)):
 
 		
 		# load events
-		filename = 'output/'+el+'_'+title+'.dat'
+		filename = 'output/'+elems[i]+'_'+title+'.dat'
 		data = np.genfromtxt(filename, names=True)
 		
 		# observed quantities
@@ -1455,6 +1452,7 @@ def chi2_global_auger_rcut_separate(elems,title = "new_simulation",rcut = 21., l
 		
 		# Modifying distribution according to rcut
 		weight_rcut = np.array([f_cut(energy0[i]*(10**18.),Z0[i]*(10**rcut)) for i in range(num)])
+		weight_rcut *= fractions[i]
 		
 		#Computing histograms for each kind of particle
 		logE  = np.log10(data['E']) + 18
