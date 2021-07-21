@@ -130,14 +130,6 @@ def simulate_dd_1D_pl(params,distances,num = 1000000,title = "new_simulation",mo
 def simulate_dd_1D_separate(gamma,distances,num = 1000000,title = "new_simulation",model = "Gilmore12",sim_seed = 0):
 	
 	output_dir()
-	elems = ['H','He','N','Si','Fe']
-	for i in range(len(elems)):
-		simulate_dd_1D_pl_elem(gamma,distances,elem=elems[i],num = num,title = title,model = model,sim_seed = sim_seed)
-	
-
-# Simulation for Power Law and distance distribution, for one element
-def simulate_dd_1D_pl_elem(gamma,distances,elem='H',num = 1000000,title = "new_simulation",model = "Gilmore12",sim_seed = 0):
-
 	#Energy distributions for each particle: H, He, N, Si, Fe
 	bins = 10000
 	g = gamma
@@ -146,92 +138,95 @@ def simulate_dd_1D_pl_elem(gamma,distances,elem='H',num = 1000000,title = "new_s
 	dist = distances[0]  # distance in Mpc
 	probd = distances[1]
 	
+	elems = ['H','He','N','Si','Fe']
 	
-	sim = ModuleList()
-	if sim_seed:
-		Random_seedThreads(sim_seed)
+	for i in range(len(elems)):
+				
+		sim = ModuleList()
+		if sim_seed:
+			Random_seedThreads(sim_seed)
 
-	#simulation steps
-	sim.add(SimplePropagation(1*kpc, 10*Mpc))
+		#simulation steps
+		sim.add(SimplePropagation(1*kpc, 10*Mpc))
 
 
-	#simulation processes
-	sim.add(PhotoPionProduction(CMB()))
-	sim.add(ElectronPairProduction(CMB()))
-	sim.add(PhotoDisintegration(CMB()))
-	
-	if (model == "Gilmore12"):
-		sim.add(PhotoPionProduction(IRB_Gilmore12()))
-		sim.add(ElectronPairProduction(IRB_Gilmore12()))
-		sim.add(PhotoDisintegration(IRB_Gilmore12()))
-	
-	if (model == "Dominguez11"): 
-		sim.add(PhotoPionProduction(IRB_Dominguez11()))
-		sim.add(ElectronPairProduction(IRB_Dominguez11()))
-		sim.add(PhotoDisintegration(IRB_Dominguez11()))
-	
-	sim.add(NuclearDecay())
-
-	#stop if particle reaches this energy level or below
-	sim.add(MinimumEnergy(1*EeV))
-
-	#define observer
-	obs = Observer()
-	#observer at x=0
-	obs.add(ObserverPoint()) 
-
-	# name of the file
-	filename = 'output/'+elem+'_'+title+'.dat'
-
-	#write output on detection of event
-	output = TextOutput(filename, Output.Event1D)
-	#output.disableAll()
-	#output.enable(Output.CurrentEnergyColumn)
-	#output.enable(Output.SourceEnergyColumn)
-	#output.enable(Output.CreatedPositionColumn)
-	#output.enable(Output.SourcePositionColumn)
-	#output.enable(Output.CurrentPositionColumn)
-	output.enable(Output.SerialNumberColumn)
-	#output.enable(Output.SourceIdColumn)
-	#output.enable(Output.CurrentIdColumn)
-	obs.onDetection(output)
-
-	sim.add(obs)
-
-	sourcelist = SourceList()
-
-	#composition
-	composition= SourceMultipleParticleTypes()
-	
-	if elem=='H':
-		composition.add(nucleusId(1,1),1.0)
-	elif elem=='He':
-		composition.add(nucleusId(4,2),1.0)
-	elif elem=='N':
-		composition.add(nucleusId(14,7),1.0)
-	elif elem=='Si':
-		composition.add(nucleusId(28,14),1.0)
-	elif elem=='Fe':
-		composition.add(nucleusId(56,26),1.0)
-
-	#Load different sources (for different distances and energies)
-	for k in range(n_d):
-		source = Source()
-		source.add(composition)
-		source.add(SourceRedshift1D())
-		source.add(SourcePosition(Vector3d(dist[k], 0, 0) * Mpc))
-		source.add(SourcePowerLawSpectrum(1*EeV,1000.*EeV,-g))
-		sourcelist.add(source, probd[k])
-	
+		#simulation processes
+		sim.add(PhotoPionProduction(CMB()))
+		sim.add(ElectronPairProduction(CMB()))
+		sim.add(PhotoDisintegration(CMB()))
 		
-	# run simulation
-	sim.setShowProgress(True)
+		if (model == "Gilmore12"):
+			sim.add(PhotoPionProduction(IRB_Gilmore12()))
+			sim.add(ElectronPairProduction(IRB_Gilmore12()))
+			sim.add(PhotoDisintegration(IRB_Gilmore12()))
+		
+		if (model == "Dominguez11"): 
+			sim.add(PhotoPionProduction(IRB_Dominguez11()))
+			sim.add(ElectronPairProduction(IRB_Dominguez11()))
+			sim.add(PhotoDisintegration(IRB_Dominguez11()))
+		
+		sim.add(NuclearDecay())
 
-	sim.run(sourcelist,num)
+		#stop if particle reaches this energy level or below
+		sim.add(MinimumEnergy(1*EeV))
 
-	# load events
-	output.close()
+		#define observer
+		obs = Observer()
+		#observer at x=0
+		obs.add(ObserverPoint()) 
 
+		# name of the file
+		filename = 'output/'+elems[i]+'_'+title+'.dat'
+
+		#write output on detection of event
+		output = TextOutput(filename, Output.Event1D)
+		#output.disableAll()
+		#output.enable(Output.CurrentEnergyColumn)
+		#output.enable(Output.SourceEnergyColumn)
+		#output.enable(Output.CreatedPositionColumn)
+		#output.enable(Output.SourcePositionColumn)
+		#output.enable(Output.CurrentPositionColumn)
+		output.enable(Output.SerialNumberColumn)
+		#output.enable(Output.SourceIdColumn)
+		#output.enable(Output.CurrentIdColumn)
+		obs.onDetection(output)
+
+		sim.add(obs)
+
+		sourcelist = SourceList()
+
+		#composition
+		composition= SourceMultipleParticleTypes()
+		
+		if elems[i]=='H':
+			composition.add(nucleusId(1,1),1.0)
+		elif elems[i]=='He':
+			composition.add(nucleusId(4,2),1.0)
+		elif elems[i]=='N':
+			composition.add(nucleusId(14,7),1.0)
+		elif elems[i]=='Si':
+			composition.add(nucleusId(28,14),1.0)
+		elif elems[i]=='Fe':
+			composition.add(nucleusId(56,26),1.0)
+
+		#Load different sources (for different distances and energies)
+		for k in range(n_d):
+			source = Source()
+			source.add(composition)
+			source.add(SourceRedshift1D())
+			source.add(SourcePosition(Vector3d(dist[k], 0, 0) * Mpc))
+			source.add(SourcePowerLawSpectrum(1*EeV,1000.*EeV,-g))
+			sourcelist.add(source, probd[k])
+		
+			
+		# run simulation
+		sim.setShowProgress(True)
+
+		sim.run(sourcelist,num)
+
+		# load events
+		output.close()
+	
 
 def simulate_dd_1D_parts(params,distances,num = 1000000,title = "new_simulation",model = "Gilmore12",parts = 1,n_e = 10000,seed = 0,sim_seed = 0):
 
