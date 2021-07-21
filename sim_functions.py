@@ -132,11 +132,11 @@ def simulate_dd_1D_separate(gamma,distances,num = 1000000,title = "new_simulatio
 	output_dir()
 	elems = ['H','He','N','Si','Fe']
 	for i in range(len(elems)):
-		simulate_dd_1D_pl_elem(gamma,elem=elems[i],distances,num = num,title = title,model = model,sim_seed = sim_seed)
+		simulate_dd_1D_pl_elem(gamma,distances,elem=elems[i],num = num,title = title,model = model,sim_seed = sim_seed)
 	
 
 # Simulation for Power Law and distance distribution, for one element
-def simulate_dd_1D_pl_elem(gamma,elem='H',distances,num = 1000000,title = "new_simulation",model = "Gilmore12",sim_seed = 0):
+def simulate_dd_1D_pl_elem(gamma,distances,elem='H',num = 1000000,title = "new_simulation",model = "Gilmore12",sim_seed = 0):
 
 	#Energy distributions for each particle: H, He, N, Si, Fe
 	bins = 10000
