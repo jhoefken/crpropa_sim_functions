@@ -912,7 +912,7 @@ def plot_errors_rcut_separate(fractions,title = "new_simulation",plotfile = "new
 		idx5 = (A > 38)
 		
 		# Modifying distribution according to rcut
-		weight_rcut = np.array([f_cut(energy0[i]*(10**18.),Z0[i]*(10**rcut)) for i in range(num)])
+		weight_rcut = np.array([f_cut(energy0[w]*(10**18.),Z0[w]*(10**rcut)) for w in range(num)])
 		weight_rcut *= fractions[i]
 
 		# calculate spectrum: J(E) = dN/dE
@@ -1452,7 +1452,7 @@ def chi2_global_auger_rcut_separate(fractions,title = "new_simulation",rcut = 21
 		idx5 = (A > 38)
 		
 		# Modifying distribution according to rcut
-		weight_rcut = np.array([f_cut(energy0[i]*(10**18.),Z0[i]*(10**rcut)) for i in range(num)])
+		weight_rcut = np.array([f_cut(energy0[w]*(10**18.),Z0[w]*(10**rcut)) for w in range(num)])
 		weight_rcut *= fractions[i]
 		
 		#Computing histograms for each kind of particle
