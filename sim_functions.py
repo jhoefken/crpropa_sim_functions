@@ -429,8 +429,10 @@ def plot_power(title = "new_simulation",plotfile = "new_simulation_plot",plottit
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	sauger_ = sauger[mask]
 	nauger_ = nauger[mask]
+	nauger_sum = nauger_.sum()
+	nauger_ = nauger_/nauger_sum
+	sauger_ = auger[mask]/nauger_sum**2
 	sigma_auger_ = sigma_auger[mask]
 
 	# load events
@@ -496,8 +498,10 @@ def plot_parts(title = "new_simulation",plotfile = "new_simulation",plottitle = 
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	sauger_ = sauger[mask]
 	nauger_ = nauger[mask]
+	nauger_sum = nauger_.sum()
+	nauger_ = nauger_/nauger_sum
+	sauger_ = auger[mask]/nauger_sum**2
 	sigma_auger_ = sigma_auger[mask]
 
 	# load events
@@ -611,8 +615,10 @@ def plot_power_parts(title = "new_simulation",plotfile = "new_simulation",plotti
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	sauger_ = sauger[mask]
 	nauger_ = nauger[mask]
+	nauger_sum = nauger_.sum()
+	nauger_ = nauger_/nauger_sum
+	sauger_ = auger[mask]/nauger_sum**2
 	sigma_auger_ = sigma_auger[mask]
 
 	# load events
@@ -701,8 +707,10 @@ def plot_power_sources(title = "new_simulation",plotfile = "new_simulation",plot
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	sauger_ = sauger[mask]
 	nauger_ = nauger[mask]
+	nauger_sum = nauger_.sum()
+	nauger_ = nauger_/nauger_sum
+	sauger_ = auger[mask]/nauger_sum**2
 	sigma_auger_ = sigma_auger[mask]
 
 	# load events
@@ -791,8 +799,10 @@ def plot_errors_rcut(title = "new_simulation",plotfile = "new_simulation",plotti
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	sauger_ = sauger[mask]
 	nauger_ = nauger[mask]
+	nauger_sum = nauger_.sum()
+	nauger_ = nauger_/nauger_sum
+	sauger_ = auger[mask]/nauger_sum**2
 	sigma_auger_ = sigma_auger[mask]
 
 	# load events
@@ -875,8 +885,10 @@ def plot_errors_rcut_separate(fractions,title = "new_simulation",plotfile = "new
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	sauger_ = sauger[mask]
 	nauger_ = nauger[mask]
+	nauger_sum = nauger_.sum()
+	nauger_ = nauger_/nauger_sum
+	sauger_ = auger[mask]/nauger_sum**2
 	sigma_auger_ = sigma_auger[mask]
 	
 	fileout = 'output/'+plotfile+'.png'
@@ -979,8 +991,10 @@ def plot_errors_parts(title = "new_simulation",plotfile = "new_simulation",plott
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	sauger_ = sauger[mask]
 	nauger_ = nauger[mask]
+	nauger_sum = nauger_.sum()
+	nauger_ = nauger_/nauger_sum
+	sauger_ = auger[mask]/nauger_sum**2
 	sigma_auger_ = sigma_auger[mask]
 
 	# load events
@@ -1085,8 +1099,10 @@ def chi2_auger(title = "new_simulation0", logemin = 18, logemax = 20.4):
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	sauger_ = sauger[mask]
 	nauger_ = nauger[mask]
+	nauger_sum = nauger_.sum()
+	nauger_ = nauger_/nauger_sum
+	sauger_ = auger[mask]/nauger_sum**2
 	
 	sauger1_ = sauger1[mask]
 	nauger1_ = nauger1[mask]
@@ -1169,8 +1185,10 @@ def chi2_particles_auger(title = "new_simulation0", logemin = 18, logemax = 20.4
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	sauger_ = sauger[mask]
 	nauger_ = nauger[mask]
+	nauger_sum = nauger_.sum()
+	nauger_ = nauger_/nauger_sum
+	sauger_ = auger[mask]/nauger_sum**2
 	
 	sauger1_ = sauger1[mask]
 	nauger1_ = nauger1[mask]
@@ -1252,8 +1270,10 @@ def chi2_global_auger(title = "new_simulation", logemin = 18, logemax = 20.4):
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	sauger_ = sauger[mask]
 	nauger_ = nauger[mask]
+	nauger_sum = nauger_.sum()
+	nauger_ = nauger_/nauger_sum
+	sauger_ = auger[mask]/nauger_sum**2
 
 	# load events
 	filename = 'output/'+title+'.dat'
@@ -1299,8 +1319,10 @@ def chi2_global_auger_parts(title = "new_simulation", parts = 1, logemin = 18, l
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	sauger_ = sauger[mask]
 	nauger_ = nauger[mask]
+	nauger_sum = nauger_.sum()
+	nauger_ = nauger_/nauger_sum
+	sauger_ = auger[mask]/nauger_sum**2
 	
 	# load events
 	filename = ['output/'+title+str(i)+'.dat' for i in range(parts)]
@@ -1366,8 +1388,10 @@ def chi2_global_auger_rcut(title = "new_simulation",rcut = 21., logemin = 18, lo
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	sauger_ = sauger[mask]
 	nauger_ = nauger[mask]
+	nauger_sum = nauger_.sum()
+	nauger_ = nauger_/nauger_sum
+	sauger_ = auger[mask]/nauger_sum**2
 
 	# load events
 	filename = 'output/'+title+'.dat'
@@ -1420,8 +1444,10 @@ def chi2_global_auger_rcut_separate(fractions,title = "new_simulation",rcut = 21
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	sauger_ = sauger[mask]
 	nauger_ = nauger[mask]
+	nauger_sum = nauger_.sum()
+	nauger_ = nauger_/nauger_sum
+	sauger_ = auger[mask]/nauger_sum**2
 	
 	first = True
 	
