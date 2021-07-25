@@ -14,20 +14,3 @@ auger5 = np.array([0, 0, 0, 0, 0, 0, 0, 8, 11, 16, 19, 22, 24, 18, 16, 7, 4, 4, 
 #auger = auger1+auger2+auger3+auger4+auger5
 auger = np.array([76176,44904,26843,16970,12109,8515,5939,4048,2567,1664,979,619,373,152,80,23,9,6,0,0])
 
-#Normalization of auger data
-n_auger = auger.sum()
-n_auger = float(n_auger)
-nauger = auger/n_auger
-nauger1 = auger1/n_auger
-nauger2 = auger2/n_auger
-nauger3 = auger3/n_auger
-nauger4 = auger4/n_auger
-nauger5 = auger5/n_auger
-
-sauger = nauger/n_auger
-sigma_auger = np.sqrt(auger)
-sauger1 = nauger1/n_auger
-sauger2 = nauger2/n_auger
-sauger3 = nauger3/n_auger
-sauger4 = nauger4/n_auger
-sauger5 = nauger5/n_auger

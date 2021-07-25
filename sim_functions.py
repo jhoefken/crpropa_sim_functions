@@ -424,16 +424,22 @@ def plot_power(title = "new_simulation",plotfile = "new_simulation_plot",plottit
 
 	output_dir()
 	
+	ebin_del_min = ebins[ebins<=logemin]
+	logemin = ebin_del_min[-1]
+	ebin_del_max = ebins[ebins>=logemax]
+	logemax = ebin_del_max[0]
+	
 	mask = (ecens >= logemin) & (ecens <= logemax)
 	mask_bins = (ebins >= logemin) & (ebins <= logemax)
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	nauger_ = nauger[mask]
-	nauger_sum = nauger_.sum()
-	nauger_ = nauger_/nauger_sum
-	sauger_ = auger[mask]/nauger_sum**2
-	sigma_auger_ = sigma_auger[mask]
+	
+	#Normalization of auger data
+	n_auger_ = auger_.sum()
+	n_auger_ = float(n_auger_)
+	nauger_ = auger_/n_auger_
+	sauger_ = nauger_/n_auger_
 
 	# load events
 	filename = 'output/'+title+'.dat'
@@ -493,16 +499,22 @@ def plot_parts(title = "new_simulation",plotfile = "new_simulation",plottitle = 
 
 	output_dir()
 	
+	ebin_del_min = ebins[ebins<=logemin]
+	logemin = ebin_del_min[-1]
+	ebin_del_max = ebins[ebins>=logemax]
+	logemax = ebin_del_max[0]
+	
 	mask = (ecens >= logemin) & (ecens <= logemax)
 	mask_bins = (ebins >= logemin) & (ebins <= logemax)
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	nauger_ = nauger[mask]
-	nauger_sum = nauger_.sum()
-	nauger_ = nauger_/nauger_sum
-	sauger_ = auger[mask]/nauger_sum**2
-	sigma_auger_ = sigma_auger[mask]
+	
+	#Normalization of auger data
+	n_auger_ = auger_.sum()
+	n_auger_ = float(n_auger_)
+	nauger_ = auger_/n_auger_
+	sauger_ = nauger_/n_auger_
 
 	# load events
 	filename = ['output/'+title+str(i)+'.dat' for i in range(parts)]
@@ -610,16 +622,22 @@ def plot_power_parts(title = "new_simulation",plotfile = "new_simulation",plotti
 
 	output_dir()
 	
+	ebin_del_min = ebins[ebins<=logemin]
+	logemin = ebin_del_min[-1]
+	ebin_del_max = ebins[ebins>=logemax]
+	logemax = ebin_del_max[0]
+	
 	mask = (ecens >= logemin) & (ecens <= logemax)
 	mask_bins = (ebins >= logemin) & (ebins <= logemax)
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	nauger_ = nauger[mask]
-	nauger_sum = nauger_.sum()
-	nauger_ = nauger_/nauger_sum
-	sauger_ = auger[mask]/nauger_sum**2
-	sigma_auger_ = sigma_auger[mask]
+	
+	#Normalization of auger data
+	n_auger_ = auger_.sum()
+	n_auger_ = float(n_auger_)
+	nauger_ = auger_/n_auger_
+	sauger_ = nauger_/n_auger_
 
 	# load events
 	filename = ['output/'+title+str(i)+'.dat' for i in range(parts)]
@@ -702,16 +720,23 @@ def plot_power_sources(title = "new_simulation",plotfile = "new_simulation",plot
 
 	output_dir()
 	
+	ebin_del_min = ebins[ebins<=logemin]
+	logemin = ebin_del_min[-1]
+	ebin_del_max = ebins[ebins>=logemax]
+	logemax = ebin_del_max[0]
+	
 	mask = (ecens >= logemin) & (ecens <= logemax)
 	mask_bins = (ebins >= logemin) & (ebins <= logemax)
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	nauger_ = nauger[mask]
-	nauger_sum = nauger_.sum()
-	nauger_ = nauger_/nauger_sum
-	sauger_ = auger[mask]/nauger_sum**2
-	sigma_auger_ = sigma_auger[mask]
+	
+	#Normalization of auger data
+	n_auger_ = auger_.sum()
+	n_auger_ = float(n_auger_)
+	nauger_ = auger_/n_auger_
+	sauger_ = nauger_/n_auger_
+
 
 	# load events
 	filename = ['output/'+title+str(i)+'.dat' for i in range(parts)]
@@ -794,16 +819,23 @@ def plot_errors_rcut(title = "new_simulation",plotfile = "new_simulation",plotti
 
 	output_dir()
 	
+	ebin_del_min = ebins[ebins<=logemin]
+	logemin = ebin_del_min[-1]
+	ebin_del_max = ebins[ebins>=logemax]
+	logemax = ebin_del_max[0]
+	
 	mask = (ecens >= logemin) & (ecens <= logemax)
 	mask_bins = (ebins >= logemin) & (ebins <= logemax)
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	nauger_ = nauger[mask]
-	nauger_sum = nauger_.sum()
-	nauger_ = nauger_/nauger_sum
-	sauger_ = auger[mask]/nauger_sum**2
-	sigma_auger_ = sigma_auger[mask]
+	
+	#Normalization of auger data
+	n_auger_ = auger_.sum()
+	n_auger_ = float(n_auger_)
+	nauger_ = auger_/n_auger_
+	sauger_ = nauger_/n_auger_
+	sigma_auger_ = np.sqrt(auger_)
 
 	# load events
 	filename = 'output/'+title+'.dat'
@@ -880,16 +912,23 @@ def plot_errors_rcut(title = "new_simulation",plotfile = "new_simulation",plotti
 
 def plot_errors_rcut_separate(fractions,title = "new_simulation",plotfile = "new_simulation",plottitle = "My simulation",rcut = 21., logemin = 18, logemax = 20.4):
 
+	ebin_del_min = ebins[ebins<=logemin]
+	logemin = ebin_del_min[-1]
+	ebin_del_max = ebins[ebins>=logemax]
+	logemax = ebin_del_max[0]
+	
 	mask = (ecens >= logemin) & (ecens <= logemax)
 	mask_bins = (ebins >= logemin) & (ebins <= logemax)
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	nauger_ = nauger[mask]
-	nauger_sum = nauger_.sum()
-	nauger_ = nauger_/nauger_sum
-	sauger_ = auger[mask]/nauger_sum**2
-	sigma_auger_ = sigma_auger[mask]
+	
+	#Normalization of auger data
+	n_auger_ = auger_.sum()
+	n_auger_ = float(n_auger_)
+	nauger_ = auger_/n_auger_
+	sauger_ = nauger_/n_auger_
+	sigma_auger_ = np.sqrt(auger_)
 	
 	fileout = 'output/'+plotfile+'.png'
 	first = True
@@ -986,16 +1025,23 @@ def plot_errors_parts(title = "new_simulation",plotfile = "new_simulation",plott
 
 	output_dir()
 	
+	ebin_del_min = ebins[ebins<=logemin]
+	logemin = ebin_del_min[-1]
+	ebin_del_max = ebins[ebins>=logemax]
+	logemax = ebin_del_max[0]
+	
 	mask = (ecens >= logemin) & (ecens <= logemax)
 	mask_bins = (ebins >= logemin) & (ebins <= logemax)
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	nauger_ = nauger[mask]
-	nauger_sum = nauger_.sum()
-	nauger_ = nauger_/nauger_sum
-	sauger_ = auger[mask]/nauger_sum**2
-	sigma_auger_ = sigma_auger[mask]
+	
+	#Normalization of auger data
+	n_auger_ = auger_.sum()
+	n_auger_ = float(n_auger_)
+	nauger_ = auger_/n_auger_
+	sauger_ = nauger_/n_auger_
+	sigma_auger_ = np.sqrt(auger_)
 
 	# load events
 	filename = ['output/'+title+str(i)+'.dat' for i in range(parts)]
@@ -1094,26 +1140,38 @@ def chi2_auger(title = "new_simulation0", logemin = 18, logemax = 20.4):
 
 	output_dir()
 	
+	ebin_del_min = ebins[ebins<=logemin]
+	logemin = ebin_del_min[-1]
+	ebin_del_max = ebins[ebins>=logemax]
+	logemax = ebin_del_max[0]
+	
 	mask = (ecens >= logemin) & (ecens <= logemax)
 	mask_bins = (ebins >= logemin) & (ebins <= logemax)
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	nauger_ = nauger[mask]
-	nauger_sum = nauger_.sum()
-	nauger_ = nauger_/nauger_sum
-	sauger_ = auger[mask]/nauger_sum**2
+	auger1_ = auger1[mask]
+	auger2_ = auger2[mask]
+	auger3_ = auger3[mask]
+	auger4_ = auger4[mask]
+	auger5_ = auger5[mask]
 	
-	sauger1_ = sauger1[mask]
-	nauger1_ = nauger1[mask]
-	sauger2_ = sauger2[mask]
-	nauger2_ = nauger2[mask]
-	sauger3_ = sauger3[mask]
-	nauger3_ = nauger3[mask]
-	sauger4_ = sauger4[mask]
-	nauger4_ = nauger4[mask]
-	sauger5_ = sauger5[mask]
-	nauger5_ = nauger5[mask]
+	#Normalization of auger data
+	n_auger_ = auger_.sum()
+	n_auger_ = float(n_auger_)
+	nauger_ = auger_/n_auger_
+	nauger1_ = auger1_/n_auger_
+	nauger2_ = auger2_/n_auger_
+	nauger3_ = auger3_/n_auger_
+	nauger4_ = auger4_/n_auger_
+	nauger5_ = auger5_/n_auger_
+	
+	sauger_ = nauger_/n_auger_
+	sauger1_ = nauger1_/n_auger_
+	sauger2_ = nauger2_/n_auger_
+	sauger3_ = nauger3_/n_auger_
+	sauger4_ = nauger4_/n_auger_
+	sauger5_ = nauger5_/n_auger_
 
 
 	# load events
@@ -1180,26 +1238,38 @@ def chi2_particles_auger(title = "new_simulation0", logemin = 18, logemax = 20.4
 
 	output_dir()
 	
+	ebin_del_min = ebins[ebins<=logemin]
+	logemin = ebin_del_min[-1]
+	ebin_del_max = ebins[ebins>=logemax]
+	logemax = ebin_del_max[0]
+	
 	mask = (ecens >= logemin) & (ecens <= logemax)
 	mask_bins = (ebins >= logemin) & (ebins <= logemax)
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	nauger_ = nauger[mask]
-	nauger_sum = nauger_.sum()
-	nauger_ = nauger_/nauger_sum
-	sauger_ = auger[mask]/nauger_sum**2
+	auger1_ = auger1[mask]
+	auger2_ = auger2[mask]
+	auger3_ = auger3[mask]
+	auger4_ = auger4[mask]
+	auger5_ = auger5[mask]
 	
-	sauger1_ = sauger1[mask]
-	nauger1_ = nauger1[mask]
-	sauger2_ = sauger2[mask]
-	nauger2_ = nauger2[mask]
-	sauger3_ = sauger3[mask]
-	nauger3_ = nauger3[mask]
-	sauger4_ = sauger4[mask]
-	nauger4_ = nauger4[mask]
-	sauger5_ = sauger5[mask]
-	nauger5_ = nauger5[mask]
+	#Normalization of auger data
+	n_auger_ = auger_.sum()
+	n_auger_ = float(n_auger_)
+	nauger_ = auger_/n_auger_
+	nauger1_ = auger1_/n_auger_
+	nauger2_ = auger2_/n_auger_
+	nauger3_ = auger3_/n_auger_
+	nauger4_ = auger4_/n_auger_
+	nauger5_ = auger5_/n_auger_
+	
+	sauger_ = nauger_/n_auger_
+	sauger1_ = nauger1_/n_auger_
+	sauger2_ = nauger2_/n_auger_
+	sauger3_ = nauger3_/n_auger_
+	sauger4_ = nauger4_/n_auger_
+	sauger5_ = nauger5_/n_auger_
 
 	# load events
 	filename = 'output/'+title+'.dat'
@@ -1265,15 +1335,22 @@ def chi2_global_auger(title = "new_simulation", logemin = 18, logemax = 20.4):
 
 	output_dir()
 	
+	ebin_del_min = ebins[ebins<=logemin]
+	logemin = ebin_del_min[-1]
+	ebin_del_max = ebins[ebins>=logemax]
+	logemax = ebin_del_max[0]
+	
 	mask = (ecens >= logemin) & (ecens <= logemax)
 	mask_bins = (ebins >= logemin) & (ebins <= logemax)
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	nauger_ = nauger[mask]
-	nauger_sum = nauger_.sum()
-	nauger_ = nauger_/nauger_sum
-	sauger_ = auger[mask]/nauger_sum**2
+	
+	#Normalization of auger data
+	n_auger_ = auger_.sum()
+	n_auger_ = float(n_auger_)
+	nauger_ = auger_/n_auger_
+	sauger_ = nauger_/n_auger_
 
 	# load events
 	filename = 'output/'+title+'.dat'
@@ -1314,15 +1391,22 @@ def chi2_global_auger_parts(title = "new_simulation", parts = 1, logemin = 18, l
 
 	output_dir()
 	
+	ebin_del_min = ebins[ebins<=logemin]
+	logemin = ebin_del_min[-1]
+	ebin_del_max = ebins[ebins>=logemax]
+	logemax = ebin_del_max[0]
+	
 	mask = (ecens >= logemin) & (ecens <= logemax)
 	mask_bins = (ebins >= logemin) & (ebins <= logemax)
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	nauger_ = nauger[mask]
-	nauger_sum = nauger_.sum()
-	nauger_ = nauger_/nauger_sum
-	sauger_ = auger[mask]/nauger_sum**2
+	
+	#Normalization of auger data
+	n_auger_ = auger_.sum()
+	n_auger_ = float(n_auger_)
+	nauger_ = auger_/n_auger_
+	sauger_ = nauger_/n_auger_
 	
 	# load events
 	filename = ['output/'+title+str(i)+'.dat' for i in range(parts)]
@@ -1383,15 +1467,22 @@ def chi2_global_auger_rcut(title = "new_simulation",rcut = 21., logemin = 18, lo
 
 	output_dir()
 	
+	ebin_del_min = ebins[ebins<=logemin]
+	logemin = ebin_del_min[-1]
+	ebin_del_max = ebins[ebins>=logemax]
+	logemax = ebin_del_max[0]
+	
 	mask = (ecens >= logemin) & (ecens <= logemax)
 	mask_bins = (ebins >= logemin) & (ebins <= logemax)
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	nauger_ = nauger[mask]
-	nauger_sum = nauger_.sum()
-	nauger_ = nauger_/nauger_sum
-	sauger_ = auger[mask]/nauger_sum**2
+	
+	#Normalization of auger data
+	n_auger_ = auger_.sum()
+	n_auger_ = float(n_auger_)
+	nauger_ = auger_/n_auger_
+	sauger_ = nauger_/n_auger_
 
 	# load events
 	filename = 'output/'+title+'.dat'
@@ -1439,16 +1530,23 @@ def chi2_global_auger_rcut(title = "new_simulation",rcut = 21., logemin = 18, lo
 
 def chi2_global_auger_rcut_separate(fractions,title = "new_simulation",rcut = 21., logemin = 18, logemax = 20.4):
 
+	ebin_del_min = ebins[ebins<=logemin]
+	logemin = ebin_del_min[-1]
+	ebin_del_max = ebins[ebins>=logemax]
+	logemax = ebin_del_max[0]
+	
 	mask = (ecens >= logemin) & (ecens <= logemax)
 	mask_bins = (ebins >= logemin) & (ebins <= logemax)
 	ebins_ = ebins[mask_bins]
 	ecens_ = ecens[mask]
 	auger_ = auger[mask]
-	nauger_ = nauger[mask]
-	nauger_sum = nauger_.sum()
-	nauger_ = nauger_/nauger_sum
-	sauger_ = auger[mask]/nauger_sum**2
 	
+	#Normalization of auger data
+	n_auger_ = auger_.sum()
+	n_auger_ = float(n_auger_)
+	nauger_ = auger_/n_auger_
+	sauger_ = nauger_/n_auger_
+		
 	first = True
 	
 	elems = ['H','He','N','Si','Fe']
@@ -1456,7 +1554,7 @@ def chi2_global_auger_rcut_separate(fractions,title = "new_simulation",rcut = 21
 	for i in range(len(elems)):
 
 		
-		if round(fractions[i],7)==0:
+		if round(10000000*fractions[i])==0:
 			continue
 				
 		# load events
